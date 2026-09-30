@@ -1,0 +1,27 @@
+class Solution:
+    def characterReplacement(self, s: str, k: int) -> int:
+        count = {} # Init count dictionary
+        res = 0 # length of longest substring
+
+        # General idea is:
+        # Use the count dictionary, letter as a key and the frequency as the value
+        # If the sliding window - most frequent character > k, adjust the window
+        # This is because (sliding window - most frequent character) = num characters we have to replace
+
+        leftPointer = 0
+        for rightPointer in range(len(s)):
+            # Add one to the corresponding letter for bookkeeping
+            count[s[rightPointer]] = 1 + count.get(s[rightPointer], 0) # inits value to zero if no value exists
+
+            # While num characters to be replaced exceeds K
+            while (rightPointer - leftPointer + 1) - max(count.values()) > k:
+                # Remove one leftPointer count and adjust the window
+                count[s[leftPointer]] -= 1
+                leftPointer += 1
+            
+            # The answer will either be a previously saved result or the length of the current valid sliding window
+            res = max(res, rightPointer - leftPointer + 1)
+
+        return res
+
+        
